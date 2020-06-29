@@ -40,9 +40,16 @@ class DBBase(db.Model):
 ## Recipe ## {{{
 class Recipe(DBBase):
     __tablename__ = "recipe"
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), unique=True, nullable=False)    
+    totaltime = db.Column(db.Float, nullable=False)
+    preptime = db.Column(db.Float)
+    cooktime = db.Column(db.Float)
+    difficulty = db.Column(db.Integer)
+
     ingredientLists = db.relationship('IngredientList', backref='recipe',
                                        lazy=True)
+    steplists = db.relationship('StepList', backref='recipe',
+                                lazy=True)
 ## }}}
 
 ## IngredientList ## {{{
@@ -66,6 +73,29 @@ class Ingredient(DBBase):
     ingredientList_id = db.Column(db.Integer,
                                   db.ForeignKey('ingredientlist.id'),
                                   nullable=False)
+## }}}
+
+### StepList ## {{{
+class StepList(DBBase):
+    __tablename__ = "steplist"
+    name = db.Column(db.String(80))
+    totaltime = db.Column(db.Float)
+    preptime = db.Column(db.Float)
+    cooktime = db.Column(db.Float)
+    order = db.Column(db.Integer, nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
+                          nullable= False)
+    steps = db.relationship('Step', backref='steplist',
+                            lazy=True)
+## }}}
+
+### Step ## {{{
+class Step(DBBase):
+    __tablename__ = 'step'
+    name = db.Column(db.String(80))
+    text = db.Column(db.Text, nullable=False)
+    steplist_id = db.Column(db.Integer, db.ForeignKey('steplist.id'),
+                            nullable=False)
 ## }}}
 
 ## }}}

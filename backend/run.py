@@ -33,6 +33,10 @@ class App:
         self.app.config.from_object('config.dev.Config')        
         self.db.init_app(self.app)
 
+    def createTables(self):
+        with self.app.app_context():
+            self.db.create_all()
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0:5000')
 ## }}}
