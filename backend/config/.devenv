@@ -1,0 +1,4 @@
+SECRET_KEY=
+FLASK_APP=souschef
+FLASK_ENV=Development
+SQLALCHEMY_DATABASE_URI=mysql://root:TvDXgcg5osvngIs@localhost/souschef
