@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## routes.py for sous-chef backend                                          ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,28 +16,31 @@
 
 ### Commentary ## {{{
 ##
-## 
+## crud routes
 ##
 ## }}}
 
-### app ## {{{
-import os
+### routes ## {{{
+
 from flask import Flask
-from app.models import db
-import config
+from app import schemas
+from app import models
+app = Flask(__name__)
 
-class App:
-    def __init__(self):
-        self.db = db
-        self.app = Flask(__name__, instance_relative_config=True)
-        self.app.config.from_object('config.dev.Config')        
-        self.db.init_app(self.app)
+### main ## {{{
+@app.route('/', methods = ['GET'])
+def main():
+    return "Hello, Recipe"
+## }}}
 
-    def createTables(self):
-        with self.app.app_context():
-            self.db.create_all()            
+### Post a recipe ## {{{
+@app.route('/recipe', methods = ['POST'])
+def createRecipe():
+    data = request.get_json()
+    recipe_schema = schemas.RecipeSchema()
+    recipe = recipe_schema.load(data)
+    res = recipe_schema.dump(recipe.create())
+    return make_response(jsonify({"recipe": res }), 200)
+## }}}
 
-if __name__ == "__main__":    
-    app = App()
-    app.app.run(host='0.0.0.0')
 ## }}}
