@@ -23,6 +23,7 @@
 ### models ## {{{
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func 
 from datetime import datetime
 
 db = SQLAlchemy()
@@ -30,10 +31,11 @@ db = SQLAlchemy()
 ## Base ## {{{
 class DBBase(db.Model):
     __abstract__ = True
+    __table_args__ = {'mysql_engine':'InnoDB'}
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.Text)
-    datecreated = db.Column(db.DateTime, default=datetime.utcnow)
-    datemodified = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    datecreated = db.Column(db.DateTime, server_default=func.now())
+    datemodified = db.Column(db.DateTime, onupdate=func.now())
 
 ## }}}
 
