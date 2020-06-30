@@ -23,21 +23,22 @@
 ### app ## {{{
 import os
 from flask import Flask
+from app import models
+from app import schemas
+from app import routes
 from app.models import db
-import config
 
-class App:
-    def __init__(self):
-        self.db = db
-        self.app = Flask(__name__, instance_relative_config=True)
-        self.app.config.from_object('config.dev.Config')        
-        self.db.init_app(self.app)
+### app factory pattern ## {{{
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object('config.dev.Config')
+db.init_app(app)
+schemas.init_app(app)
+routes.init_app(app)
+## }}}
 
-    def createTables(self):
-        with self.app.app_context():
-            self.db.create_all()            
+### __main__ ## {{{
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+## }}}
 
-if __name__ == "__main__":    
-    app = App()
-    app.app.run(host='0.0.0.0')
 ## }}}

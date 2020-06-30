@@ -22,25 +22,24 @@
 
 ### routes ## {{{
 
-from flask import Flask
 from app import schemas
 from app import models
-app = Flask(__name__)
 
-### main ## {{{
-@app.route('/', methods = ['GET'])
-def main():
-    return "Hello, Recipe"
-## }}}
+def init_app(app):
+    ### main ## {{{
+    @app.route('/', methods = ['GET'])
+    def main():
+        return "Hello, Recipe"
+    ## }}}
 
-### Post a recipe ## {{{
-@app.route('/recipe', methods = ['POST'])
-def createRecipe():
-    data = request.get_json()
-    recipe_schema = schemas.RecipeSchema()
-    recipe = recipe_schema.load(data)
-    res = recipe_schema.dump(recipe.create())
-    return make_response(jsonify({"recipe": res }), 200)
-## }}}
+    ### Post a recipe ## {{{
+    @app.route('/recipe', methods = ['POST'])
+    def createRecipe():
+        data = request.get_json()
+        recipe_schema = schemas.RecipeSchema()
+        recipe = recipe_schema.load(data)
+        res = recipe_schema.dump(recipe.create())
+        return make_response(jsonify({"recipe": res }), 200)
+    ## }}}
 
 ## }}}

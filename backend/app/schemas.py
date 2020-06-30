@@ -26,51 +26,51 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from app import models
 
-app = Flask(__name__)
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
+def init_app(app):
+    db = SQLAlchemy(app)
+    ma = Marshmallow(app)
 
-### RecipeSchema ## {{{
-class RecipeSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = models.Recipe
-        include_fk = True
+    ### RecipeSchema ## {{{
+    class RecipeSchema(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = models.Recipe
+            include_fk = True
 
-    name = ma.auto_field()
-    totaltime = ma.auto_field()
-    preptime = ma.auto_field()
-    cooktime = ma.auto_field()
-    difficulty = ma.auto_field()        
-## }}}
+        name = ma.auto_field()
+        totaltime = ma.auto_field()
+        preptime = ma.auto_field()
+        cooktime = ma.auto_field()
+        difficulty = ma.auto_field()        
+    ## }}}
 
-### IngredientListSchema ## {{{
-class IngredientListSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = models.IngredientList
-        include_fk = True
-    
-## }}}
-
-### IngredientSchema ## {{{
-class IngredientSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = models.Ingredient
-        include_fk = True
+    ### IngredientListSchema ## {{{
+    class IngredientListSchema(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = models.IngredientList
+            include_fk = True
         
-## }}}
+    ## }}}
 
-### StepListSchema ## {{{
-class StepListSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = models.Ingredient
-        include_fk = True
-## }}}
+    ### IngredientSchema ## {{{
+    class IngredientSchema(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = models.Ingredient
+            include_fk = True
+        
+    ## }}}
 
-### StepSchema ## {{{
-class StepSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = models.Ingredient
-        include_fk = True
-## }}}
+    ### StepListSchema ## {{{
+    class StepListSchema(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = models.Ingredient
+            include_fk = True
+    ## }}}
+
+    ### StepSchema ## {{{
+    class StepSchema(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = models.Ingredient
+            include_fk = True
+    ## }}}
 
 ## }}}
