@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## recipe.py for sous-chef backend                                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,29 +16,39 @@
 
 ### Commentary ## {{{
 ##
-## 
+## recipe model
 ##
 ## }}}
 
-### app ## {{{
-import os
-from flask import Flask
-from app.models import db
-from app.routes import bp, recipe_bp
-
-### app factory pattern ## {{{
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config.dev.Config')
-db.init_app(app)
-app.register_blueprint(recipe_bp)
+### libraries ## {{{
+from .dbbase import DBBase, db
 ## }}}
 
-@app.before_first_request
-def setup():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-        
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+### recipe ## {{{
+class Recipe(DBBase):
+    __tablename__ = "recipe"
+    name = db.Column(db.String(30), unique=True, nullable=False)
+    author = db.Column(db.String(30), nullable=False)
+    totaltime = db.Column(db.Float, nullable=False)
+    preptime = db.Column(db.Float)
+    cooktime = db.Column(db.Float)
+    difficulty = db.Column(db.Integer)
+
+    def __init__(self, name, author, totaltime, preptime, cooktime, difficulty):
+        self.name = name
+        self.author = totaltime
+        self.totaltime = totaltime
+        self.preptime = preptime
+        self.cooktime = cooktime
+        self.difficulty = difficulty
+
+    def serialize(self):
+        return { "name": self.name,
+                 "author": self.author,
+                 "totaltime": self.totaltime,
+                 "preptime": self.preptime,
+                 "cooktime": self.cooktime,
+                 "difficulty": self.difficulty
+        }
+
 ## }}}

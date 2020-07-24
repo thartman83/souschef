@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## __init__.py for sous-chef backend routes                                   ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,13 +16,11 @@
 
 ### Commentary ## {{{
 ##
-## 
+## Routes package for sous-chef backend
 ##
 ## }}}
 
-from os import pathlib
-
-### app ## {{{
-if __name__ == "__main__":
-    print("Hello, World")
+### __init__ ## {{{
+from .basic import bp
+from .recipe import recipe_bp
 ## }}}

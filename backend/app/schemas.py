@@ -24,53 +24,68 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from marshmallow import post_load, fields
 from app import models
 
+db = SQLAlchemy()
+ma = Marshmallow()
+
+
 def init_app(app):
-    db = SQLAlchemy(app)
-    ma = Marshmallow(app)
+    with app.app_context():
+        ma.init_app(app)
 
-    ### RecipeSchema ## {{{
-    class RecipeSchema(ma.SQLAlchemyAutoSchema):
-        class Meta:
-            model = models.Recipe
-            include_fk = True
-
-        name = ma.auto_field()
-        totaltime = ma.auto_field()
-        preptime = ma.auto_field()
-        cooktime = ma.auto_field()
-        difficulty = ma.auto_field()        
-    ## }}}
-
-    ### IngredientListSchema ## {{{
-    class IngredientListSchema(ma.SQLAlchemyAutoSchema):
-        class Meta:
-            model = models.IngredientList
-            include_fk = True
+### StepSchema ## {{{
+class StepSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.Step
+        include_fk = True
+## }}}
         
-    ## }}}
+### StepListSchema ## {{{
+class StepListSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.StepList
+        include_fk = True
 
-    ### IngredientSchema ## {{{
-    class IngredientSchema(ma.SQLAlchemyAutoSchema):
-        class Meta:
-            model = models.Ingredient
-            include_fk = True
-        
-    ## }}}
+    name = ma.auto_field()
+    totaltime = ma.auto_field()
+    preptime = ma.auto_field()
+    cooktime = ma.auto_field()
+    order = ma.auto_field()
 
-    ### StepListSchema ## {{{
-    class StepListSchema(ma.SQLAlchemyAutoSchema):
-        class Meta:
-            model = models.Ingredient
-            include_fk = True
-    ## }}}
+    
+## }}}
+    
+### RecipeSchema ## {{{
+class RecipeSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.Recipe
+        include_fk = True
 
-    ### StepSchema ## {{{
-    class StepSchema(ma.SQLAlchemyAutoSchema):
-        class Meta:
-            model = models.Ingredient
-            include_fk = True
-    ## }}}
+    name = ma.auto_field()
+    totaltime = ma.auto_field()
+    preptime = ma.auto_field()
+    cooktime = ma.auto_field()
+    difficulty = ma.auto_field()
+    steplists = fields.List(fields.Nested(StepListSchema, exclude=("recipe_id",)))
+
+## }}}
+
+### IngredientListSchema ## {{{
+class IngredientListSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.IngredientList
+        include_fk = True
+
+## }}}
+
+### IngredientSchema ## {{{
+class IngredientSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.Ingredient
+        include_fk = True
+
+## }}}
 
 ## }}}

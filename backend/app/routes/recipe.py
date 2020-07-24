@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## recipe.py for sous-chef backend routes package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,29 +16,26 @@
 
 ### Commentary ## {{{
 ##
-## 
+## recipe routes for the sous-chef backend routes package
 ##
 ## }}}
 
-### app ## {{{
-import os
-from flask import Flask
-from app.models import db
-from app.routes import bp, recipe_bp
+### recipe ## {{{
+from flask import Blueprint, request
+from ..models import Recipe, db
 
-### app factory pattern ## {{{
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config.dev.Config')
-db.init_app(app)
-app.register_blueprint(recipe_bp)
-## }}}
+recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
-@app.before_first_request
-def setup():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-        
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+@recipe_bp.route('', methods=['POST'])
+def addRecipe():
+    recipe = Recipe(request.json['name'],
+                    request.json['author'],
+                    request.json['totaltime'],
+                    request.json['preptime'],
+                    request.json['cooktime'],
+                    request.json['difficulty'])
+    db.session.add(recipe)
+    db.session.commit()
+    ##return jsonify({"recipe", recipe.serialize()})
+    return ""
 ## }}}

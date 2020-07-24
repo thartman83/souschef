@@ -23,7 +23,8 @@
 ### routes ## {{{
 
 from app import schemas
-from app import models
+from app.models import db, Recipe
+from flask import request, make_response, jsonify
 
 def init_app(app):
     ### main ## {{{
@@ -38,8 +39,16 @@ def init_app(app):
         data = request.get_json()
         recipe_schema = schemas.RecipeSchema()
         recipe = recipe_schema.load(data)
-        res = recipe_schema.dump(recipe.create())
+
+        db.session.add(recipe)
+        db.session.commit()
+        res = recipe_schema.dump(recipe)
         return make_response(jsonify({"recipe": res }), 200)
+
+    def createStepLists(data):
+        s = schemas.StepListSchema(exclude=("recipe_id"))
+        return s.load(data, partial=True)
+            
     ## }}}
 
 ## }}}

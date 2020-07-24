@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## basic.py for sous-chef backend routes                                   ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,29 +16,17 @@
 
 ### Commentary ## {{{
 ##
-## 
+## basic routing (mostly testing)
 ##
 ## }}}
 
-### app ## {{{
-import os
-from flask import Flask
-from app.models import db
-from app.routes import bp, recipe_bp
+### basic ## {{{
+from flask import Blueprint, request
 
-### app factory pattern ## {{{
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config.dev.Config')
-db.init_app(app)
-app.register_blueprint(recipe_bp)
-## }}}
+bp = Blueprint('basic', __name__, url_prefix="/basic")
 
-@app.before_first_request
-def setup():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-        
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+@bp.route('/', methods=['GET', 'POST'])
+def root():
+    if request.method == 'GET':
+        return 'Hello, Basic'
 ## }}}

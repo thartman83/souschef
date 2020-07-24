@@ -48,10 +48,9 @@ class Recipe(DBBase):
     cooktime = db.Column(db.Float)
     difficulty = db.Column(db.Integer)
 
-    ingredientLists = db.relationship('IngredientList', backref='recipe',
-                                       lazy=True)
-    steplists = db.relationship('StepList', backref='recipe',
-                                lazy=True)
+#    ingredientLists = db.relationship('IngredientList', backref='recipe',
+#                                       lazy=True)
+    steplists = db.relationship('StepList', backref='recipe')
 ## }}}
 
 ## IngredientList ## {{{

@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## base.py for sous-chef backend                                             ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,29 +16,26 @@
 
 ### Commentary ## {{{
 ##
-## 
+## base model class
 ##
 ## }}}
 
-### app ## {{{
-import os
-from flask import Flask
-from app.models import db
-from app.routes import bp, recipe_bp
-
-### app factory pattern ## {{{
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config.dev.Config')
-db.init_app(app)
-app.register_blueprint(recipe_bp)
+### libraries ## {{{
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func 
+from datetime import datetime
 ## }}}
 
-@app.before_first_request
-def setup():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-        
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+### db ## {{{
+db = SQLAlchemy()
+## }}}
+
+### DBBase ## {{{
+class DBBase(db.Model):
+    __abstract__   = True
+    __table_args__ = {'mysql_engine':'InnoDB'}
+    id = db.Column(db.Integer, primary_key=True)
+    notes = db.Column(db.Text)
+    datecreated = db.Column(db.DateTime, server_default=func.now())
+    datemodified = db.Column(db.DateTime, server_default=func.now())    
 ## }}}
