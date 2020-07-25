@@ -22,5 +22,6 @@
 
 ### libraries ## {{{
 from .recipe import Recipe
+from .author import Author
 from .dbbase import db
 ## }}}

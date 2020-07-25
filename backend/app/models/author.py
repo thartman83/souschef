@@ -1,5 +1,5 @@
 ###############################################################################
-## recipe.py for sous-chef backend                                           ##
+## author.py for sous-chef backend models package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,39 +16,27 @@
 
 ### Commentary ## {{{
 ##
-## recipe model
+## Author model for sous-chef backend models package
 ##
 ## }}}
 
-### libraries ## {{{
+### author ## {{{
 from .dbbase import DBBase, db
-## }}}
 
-### recipe ## {{{
-class Recipe(DBBase):
-    __tablename__ = "recipe"
-    name = db.Column(db.String(30), unique=True, nullable=False)
-    author = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
-    totaltime = db.Column(db.Float, nullable=False)
-    preptime = db.Column(db.Float)
-    cooktime = db.Column(db.Float)
-    difficulty = db.Column(db.Integer)    
+class Author(DBBase):
+    __tablename__ = "author"
+    firstname = db.Column(db.String(40),  nullable=False)
+    lastname  = db.Column(db.String(40),  nullable=False)
+    fullname  = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, name, author, totaltime, preptime, cooktime, difficulty):
-        self.name = name
-        self.author = totaltime
-        self.totaltime = totaltime
-        self.preptime = preptime
-        self.cooktime = cooktime
-        self.difficulty = difficulty
+    def __init__(self, firstname, lastname):
+        self.firstname = firstname
+        self.lastname  = lastname
+        self.fullname  = firstname + " " + lastname
 
     def serialize(self):
-        return { "name": self.name,
-                 "author": self.author,
-                 "totaltime": self.totaltime,
-                 "preptime": self.preptime,
-                 "cooktime": self.cooktime,
-                 "difficulty": self.difficulty
-        }
-
+        return { "firstname": self.firstname,
+                 "lastname":  self.firstname,
+                 "fullname":  self.fullname }
+    
 ## }}}
