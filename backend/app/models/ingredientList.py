@@ -22,6 +22,7 @@
 
 ### ingredientList ## {{{
 from .dbbase import DBBase, db
+from .ingredient import Ingredient
 
 class IngredientList(DBBase):
     __tablename__ = "ingredientlist"
@@ -29,6 +30,7 @@ class IngredientList(DBBase):
     displayorder     = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
                           nullable=False)
+    ingredients = db.relationship('Ingredient')
 
     def __init__(self, name, order, recipe_id):
         self.name = name
@@ -38,7 +40,8 @@ class IngredientList(DBBase):
     def serialize(self):
         return { "name": self.name,
                  "displayorder": self.displayorder,
-                 "recipe_id": self.recipe_id
+                 "recipe_id": self.recipe_id,
+                 "ingredients": list(map(Ingredient.serialize, self.ingredients))
         }
     
 

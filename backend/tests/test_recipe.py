@@ -38,7 +38,21 @@ def test_createRecipe(client, app, db):
         "ingredientLists": [
             {
                 "name": "Ingredient list1",
-                "displayorder": 1                
+                "displayorder": 1,
+                "ingredients": [
+                    {
+                        "name": "Onion",
+                        "unit": "medium",
+                        "amount": 1.0,
+                        "displayorder": 1,
+                    },
+                    {
+                        "name": "Garlic",
+                        "unit": "cloves",
+                        "amount": 4.0,
+                        "displayorder": 2,
+                    }
+                ]
             },
             {
                 "name": "Ingredient list2",
@@ -76,5 +90,19 @@ def test_createRecipe(client, app, db):
     assert row['name'] == "Ingredient list2"
     assert row['displayorder'] == 2
     assert row['recipe_id'] == recipe_id
-    
+
+    cursor.execute('SELECT * FROM ingredient ORDER BY displayorder')
+    row = cursor.fetchone()
+        
+    assert row['name'] == "Onion"
+    assert row['unit'] == "medium"
+    assert row['amount'] == 1.0
+    assert row['displayorder'] == 1
+
+
+    row = cursor.fetchone()
+    assert row['name'] == "Garlic"
+    assert row['unit'] == "cloves"
+    assert row['amount'] == 4
+    assert row['displayorder'] == 2
 ## }}}

@@ -22,7 +22,7 @@
 
 ### recipe ## {{{
 from flask import Blueprint, request, jsonify
-from ..models import Recipe, Author, IngredientList, db
+from ..models import Recipe, Author, IngredientList, Ingredient, db
 
 recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
@@ -43,11 +43,16 @@ def createRecipe():
     db.session.flush()
 
     for i in request.json['ingredientLists']:
-        ingredientList = createIngredientList(i, recipe.id)
-        if ingredientList is None:
+        ingredientList_id = createIngredientList(i, recipe.id)
+        if ingredientList_id is None:
             return "IngredientList was malformed", 422
 
-        db.session.add(ingredientList)
+        if 'ingredients' in i:
+            for j in i['ingredients']:
+                ingredient_id = createIngredient(j, ingredientList_id)
+
+                if ingredient_id is None:
+                    return "Ingredient was malformed", 422
         
     db.session.commit()
     return jsonify({"recipe": recipe.serialize()})
@@ -82,8 +87,22 @@ def createIngredientList(ingredientList, recipe_id):
     if not 'name' in ingredientList or not 'displayorder' in ingredientList:
         return None
     else:
-        return IngredientList(ingredientList['name'],
+        ret = IngredientList(ingredientList['name'],
                               ingredientList['displayorder'],
                               recipe_id)
-    
+        db.session.add(ret)
+        db.session.flush()
+        return ret.id
+
+def createIngredient(ingredient, ingredientList_id):
+    if not 'name' in ingredient or not 'unit' in ingredient or \
+       not 'amount' in ingredient or not 'displayorder' in ingredient:
+        return None
+
+    ret = Ingredient(ingredient['name'], ingredient['unit'], ingredient['amount'],
+                     ingredient['displayorder'], ingredientList_id)
+    db.session.add(ret)
+    db.session.flush()
+    return ret.id
+
 ## }}}
