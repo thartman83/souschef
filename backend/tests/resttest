@@ -4,7 +4,6 @@ User-Agent: Emacs restclient
 
 POST http://localhost:5000/recipe
 Content-Type: application/json
-
 {
         "name" : "Test Recipe5",
         "author": { "firstname": "Ema",
@@ -16,12 +15,34 @@ Content-Type: application/json
         "ingredientLists": [
             {
                 "name": "Ingredient list1",
-                "displayorder": 1                
+                "displayorder": 1,
+                "ingredients": [
+                    {
+                        "name": "Onion",
+                        "unit": "medium",
+                        "amount": 1.0,
+                        "displayorder": 1
+                    },                    
+                    {
+                        "name": "Garlic",
+                        "unit": "cloves",
+                        "amount": 4.0,
+                        "displayorder": 2
+                    }
+                ]
             },
             {
                 "name": "Ingredient list2",
                 "displayorder": 2
             }            
-        ]
-    }     
-
+        ],
+        "stepLists": [        
+                     {
+                      "name": "Step List 1",
+                      "displayorder": 1
+                     },
+                     {
+                      "displayorder": 2
+                     }
+        ]            
+    }

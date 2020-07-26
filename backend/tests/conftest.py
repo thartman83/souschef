@@ -57,4 +57,57 @@ def runner(app):
 def db():
     db = mysql.connector.MySQLConnection(**mysqlconfig)
     return db
+
+@pytest.fixture
+def gooddata():
+    return {
+        "name" : "Test Recipe5",
+        "author": { "firstname": "Ema",
+                    "lastname": "Nymton" },
+        "totaltime" : 1,
+        "preptime" : 5,
+        "cooktime" : 5,
+        "difficulty" : 1,
+        "ingredientLists": [
+            {
+                "name": "Ingredient list1",
+                "displayorder": 1,
+                "ingredients": [
+                    {
+                        "name": "Onion",
+                        "unit": "medium",
+                        "amount": 1.0,
+                        "displayorder": 1,
+                    },
+                    {
+                        "name": "Garlic",
+                        "unit": "cloves",
+                        "amount": 4.0,
+                        "displayorder": 2,
+                    }
+                ]
+            },
+            {
+                "name": "Ingredient list2",
+                "displayorder": 2
+            }            
+        ],
+      "stepLists": [
+          {
+              "name": "Step 1 Title",
+              "totaltime": 1,
+              "preptime": 1,
+              "cooktime": 1,
+              "displayorder": 1,              
+          },
+          {
+              "name": "Step 2 Title",
+              "totaltime": 2,
+              "preptime": 2,
+              "cooktime": 2,
+              "displayorder": 2,              
+          }
+      ]
+    }
+
 ## }}}

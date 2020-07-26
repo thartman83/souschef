@@ -26,42 +26,8 @@ import json
 
 headers = { "Content-Type": "application/json" }
 
-def test_createRecipe(client, app, db):
-    data = {
-        "name" : "Test Recipe5",
-        "author": { "firstname": "Ema",
-                    "lastname": "Nymton" },
-        "totaltime" : 1,
-        "preptime" : 5,
-        "cooktime" : 5,
-        "difficulty" : 1,
-        "ingredientLists": [
-            {
-                "name": "Ingredient list1",
-                "displayorder": 1,
-                "ingredients": [
-                    {
-                        "name": "Onion",
-                        "unit": "medium",
-                        "amount": 1.0,
-                        "displayorder": 1,
-                    },
-                    {
-                        "name": "Garlic",
-                        "unit": "cloves",
-                        "amount": 4.0,
-                        "displayorder": 2,
-                    }
-                ]
-            },
-            {
-                "name": "Ingredient list2",
-                "displayorder": 2
-            }            
-        ]
-    }
-    
-    response = client.post('/recipe', data = json.dumps(data),
+def test_createRecipe(client, app, db, gooddata):    
+    response = client.post('/recipe', data = json.dumps(gooddata),
                            headers = headers)
 
     assert response.status_code == 200
@@ -76,6 +42,10 @@ def test_createRecipe(client, app, db):
     cursor.execute('SELECT COUNT(ID) as c FROM author')
     assert cursor.fetchone()['c'] == 1
 
+    validateIngredientLists(cursor, recipe_id)
+    validateStepList(cursor, recipe_id)
+
+def validateIngredientLists(cursor, recipe_id):
     cursor.execute('SELECT * FROM ingredientlist ORDER BY displayorder')
     row = cursor.fetchone()
     assert 'name' in row
@@ -86,11 +56,15 @@ def test_createRecipe(client, app, db):
     assert row['displayorder'] == 1
     assert row['recipe_id'] == recipe_id
 
+    ingredientlist_id = row['id']
+
     row = cursor.fetchone()
     assert row['name'] == "Ingredient list2"
     assert row['displayorder'] == 2
     assert row['recipe_id'] == recipe_id
+    validateIngredients(cursor, ingredientlist_id)
 
+def validateIngredients(cursor, ingredientlist_id):
     cursor.execute('SELECT * FROM ingredient ORDER BY displayorder')
     row = cursor.fetchone()
         
@@ -105,4 +79,25 @@ def test_createRecipe(client, app, db):
     assert row['unit'] == "cloves"
     assert row['amount'] == 4
     assert row['displayorder'] == 2
+
+def validateStepList(cursor, recipe_id):
+    cursor.execute("""SELECT * FROM steplist where recipe_id = %i ORDER BY 
+displayorder""" % recipe_id)
+    row = cursor.fetchone()
+
+    assert row['name'] == 'Step 1 Title'
+    assert row['totaltime'] == 1
+    assert row['preptime'] == 1
+    assert row['cooktime'] == 1
+    assert row['displayorder'] == 1
+    assert row['recipe_id'] == recipe_id
+
+    row = cursor.fetchone()
+    assert row['name'] == 'Step 2 Title'
+    assert row['totaltime'] == 2
+    assert row['preptime'] == 2
+    assert row['cooktime'] == 2
+    assert row['displayorder'] == 2
+    assert row['recipe_id'] == recipe_id
+    
 ## }}}

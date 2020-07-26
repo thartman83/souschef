@@ -1,5 +1,5 @@
 ###############################################################################
-## recipe.py for sous-chef backend                                           ##
+## steplist.py for sous-chef backend models package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,47 +16,38 @@
 
 ### Commentary ## {{{
 ##
-## recipe model
+## StepList model for the sous-chef backend models package 
 ##
 ## }}}
 
-### libraries ## {{{
+### steplist ## {{{
 from .dbbase import DBBase, db
-from .ingredientList import IngredientList
-from .stepList import StepList
-## }}}
 
-### recipe ## {{{
-class Recipe(DBBase):
-    __tablename__ = "recipe"
-    name = db.Column(db.String(30), unique=True, nullable=False)
-    author = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
-    totaltime = db.Column(db.Float, nullable=False)
-    preptime = db.Column(db.Float)
-    cooktime = db.Column(db.Float)
-    difficulty = db.Column(db.Integer)
-    ingredientLists = db.relationship('IngredientList')
-    stepLists = db.relationship('StepList')
+class StepList(DBBase):
+    __tablename__ = "steplist"
+    name = db.Column(db.String(80))
+    totaltime = db.Column(db.Integer)
+    preptime = db.Column(db.Integer)
+    cooktime = db.Column(db.Integer)
+    displayorder = db.Column(db.Integer, nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
+                          nullable = False)
 
-    def __init__(self, name, author, totaltime, preptime, cooktime, difficulty):
+    def __init__(self, name, totaltime, preptime, cooktime, displayorder,
+                 recipe_id):
         self.name = name
-        self.author = totaltime
         self.totaltime = totaltime
         self.preptime = preptime
         self.cooktime = cooktime
-        self.difficulty = difficulty
+        self.displayorder = displayorder
+        self.recipe_id = recipe_id
 
     def serialize(self):
         return { "name": self.name,
-                 "author": self.author,
                  "totaltime": self.totaltime,
                  "preptime": self.preptime,
                  "cooktime": self.cooktime,
-                 "difficulty": self.difficulty,
-                 "ingredientLists": list(map(IngredientList.serialize,
-                                             self.ingredientLists)),
-                 "stepLists": list(map(StepList.serialize,
-                                       self.stepLists))
+                 "displayorder": self.displayorder,
+                 "recipe_id": self.recipe_id
         }
-
 ## }}}
