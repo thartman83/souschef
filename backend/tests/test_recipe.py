@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## test_recipe.py for sous-chef backend testing                                  ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,14 +16,36 @@
 
 ### Commentary ## {{{
 ##
-## 
+## test methods for the recipe routes and models in the sous-chef backend
 ##
 ## }}}
 
-### app ## {{{
-from app.appfactory import create
+### test_recipe ## {{{
+from app.appfactory import create_app
+import json
 
-if __name__ == "__main__":
-    app = create_app('config.dev.Config')
-    app.run(host='0.0.0.0')
+headers = { "Content-Type": "application/json" }
+
+def test_createRecipe(client, app, db):
+    data = {
+        "name" : "Test Recipe5",
+        "author": { "firstname": "Ema",
+                    "lastname": "Nymton" },
+        "totaltime" : 1,
+        "preptime" : 5,
+        "cooktime" : 5,
+        "difficulty" : 1
+    }
+    
+    response = client.post('/recipe', data = json.dumps(data),
+                           headers = headers)
+
+    assert response.status_code == 200
+
+    cursor = db.cursor()
+    cursor.execute('SELECT COUNT(ID) FROM recipe')
+    assert cursor.fetchone()[0]
+
+    cursor.execute('SELECT COUNT(ID) FROM author')
+    assert cursor.fetchone()[0]
 ## }}}

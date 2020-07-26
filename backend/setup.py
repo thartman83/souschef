@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## setup.py for sous-chef backend                                          ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,14 +16,12 @@
 
 ### Commentary ## {{{
 ##
-## 
+## setup functions
 ##
 ## }}}
 
-### app ## {{{
-from app.appfactory import create
+### setup ## {{{
+from setuptools import setup, find_packages
 
-if __name__ == "__main__":
-    app = create_app('config.dev.Config')
-    app.run(host='0.0.0.0')
+setup(name="app", packages=find_packages())
 ## }}}

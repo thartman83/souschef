@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## test_factory.py for sous-chef backend testing package                     ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,14 +16,16 @@
 
 ### Commentary ## {{{
 ##
-## 
+## Test factory methods for the sous-chef backend
 ##
 ## }}}
 
-### app ## {{{
-from app.appfactory import create
+### test_factory ## {{{
 
-if __name__ == "__main__":
-    app = create_app('config.dev.Config')
-    app.run(host='0.0.0.0')
+from app.appfactory import create_app
+import json
+
+def test_config():
+    assert create_app('config.test.Config').testing
+
 ## }}}

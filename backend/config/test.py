@@ -1,5 +1,5 @@
 ###############################################################################
-## app.py for sous chef backend                                              ##
+## test.py for sous-chef backend config package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,14 +16,24 @@
 
 ### Commentary ## {{{
 ##
-## 
+## Testing configuration for the sous-chef backend
 ##
 ## }}}
 
-### app ## {{{
-from app.appfactory import create
+### test ## {{{
+from os import environ, path
+from dotenv import load_dotenv
 
-if __name__ == "__main__":
-    app = create_app('config.dev.Config')
-    app.run(host='0.0.0.0')
+basedir = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, '.devenv'))
+
+class Config:
+    SECRET_KEY = environ.get('SECRET_KEY')
+    FLASK_APP = environ.get('FLASK_APP')
+    FLASK_ENV = environ.get('FLASK_ENV')
+    TESTING = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 ## }}}

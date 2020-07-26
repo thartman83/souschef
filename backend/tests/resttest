@@ -1,0 +1,15 @@
+# -*- restclient -*-
+
+User-Agent: Emacs restclient
+
+POST http://localhost:5000/recipe
+Content-Type: application/json
+
+{
+  "name" : "Test Recipe5",
+  "author": { "firstname": "Ema", "lastname": "Nymton" },
+  "totaltime" : 1,
+  "preptime" : 5,
+  "cooktime" : 5,
+  "difficulty" : 1
+}
