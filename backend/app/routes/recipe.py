@@ -22,7 +22,7 @@
 
 ### recipe ## {{{
 from flask import Blueprint, request, jsonify
-from ..models import Recipe, Author, db
+from ..models import Recipe, Author, IngredientList, db
 
 recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
@@ -40,6 +40,15 @@ def createRecipe():
                     request.json['cooktime'],
                     request.json['difficulty'])
     db.session.add(recipe)
+    db.session.flush()
+
+    for i in request.json['ingredientLists']:
+        ingredientList = createIngredientList(i, recipe.id)
+        if ingredientList is None:
+            return "IngredientList was malformed", 422
+
+        db.session.add(ingredientList)
+        
     db.session.commit()
     return jsonify({"recipe": recipe.serialize()})
 
@@ -67,6 +76,14 @@ def getCreateAuthor(author):
         return None
 
 def authorExists(firstname, lastname):
-    return Author.query.filter_by(firstname=firstname, lastname=lastname).first() 
+    return Author.query.filter_by(firstname=firstname, lastname=lastname).first()
+
+def createIngredientList(ingredientList, recipe_id):
+    if not 'name' in ingredientList or not 'displayorder' in ingredientList:
+        return None
+    else:
+        return IngredientList(ingredientList['name'],
+                              ingredientList['displayorder'],
+                              recipe_id)
     
 ## }}}

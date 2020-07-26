@@ -21,7 +21,7 @@
 ## }}}
 
 ### app ## {{{
-from app.appfactory import create
+from app.appfactory import create_app
 
 if __name__ == "__main__":
     app = create_app('config.dev.Config')

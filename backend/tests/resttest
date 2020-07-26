@@ -6,10 +6,22 @@ POST http://localhost:5000/recipe
 Content-Type: application/json
 
 {
-  "name" : "Test Recipe5",
-  "author": { "firstname": "Ema", "lastname": "Nymton" },
-  "totaltime" : 1,
-  "preptime" : 5,
-  "cooktime" : 5,
-  "difficulty" : 1
-}
+        "name" : "Test Recipe5",
+        "author": { "firstname": "Ema",
+                    "lastname": "Nymton" },
+        "totaltime" : 1,
+        "preptime" : 5,
+        "cooktime" : 5,
+        "difficulty" : 1,
+        "ingredientLists": [
+            {
+                "name": "Ingredient list1",
+                "displayorder": 1                
+            },
+            {
+                "name": "Ingredient list2",
+                "displayorder": 2
+            }            
+        ]
+    }     
+

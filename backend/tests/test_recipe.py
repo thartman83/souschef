@@ -34,7 +34,17 @@ def test_createRecipe(client, app, db):
         "totaltime" : 1,
         "preptime" : 5,
         "cooktime" : 5,
-        "difficulty" : 1
+        "difficulty" : 1,
+        "ingredientLists": [
+            {
+                "name": "Ingredient list1",
+                "displayorder": 1                
+            },
+            {
+                "name": "Ingredient list2",
+                "displayorder": 2
+            }            
+        ]
     }
     
     response = client.post('/recipe', data = json.dumps(data),
@@ -42,10 +52,29 @@ def test_createRecipe(client, app, db):
 
     assert response.status_code == 200
 
-    cursor = db.cursor()
-    cursor.execute('SELECT COUNT(ID) FROM recipe')
-    assert cursor.fetchone()[0]
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('SELECT COUNT(ID) as c FROM recipe')
+    assert cursor.fetchone()['c'] == 1
 
-    cursor.execute('SELECT COUNT(ID) FROM author')
-    assert cursor.fetchone()[0]
+    cursor.execute('SELECT id from recipe')
+    recipe_id = cursor.fetchone()['id']
+
+    cursor.execute('SELECT COUNT(ID) as c FROM author')
+    assert cursor.fetchone()['c'] == 1
+
+    cursor.execute('SELECT * FROM ingredientlist ORDER BY displayorder')
+    row = cursor.fetchone()
+    assert 'name' in row
+    assert 'displayorder' in row
+    assert 'recipe_id' in row
+
+    assert row['name'] == "Ingredient list1"
+    assert row['displayorder'] == 1
+    assert row['recipe_id'] == recipe_id
+
+    row = cursor.fetchone()
+    assert row['name'] == "Ingredient list2"
+    assert row['displayorder'] == 2
+    assert row['recipe_id'] == recipe_id
+    
 ## }}}

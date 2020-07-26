@@ -22,6 +22,7 @@
 
 ### libraries ## {{{
 from .dbbase import DBBase, db
+from .ingredientList import IngredientList
 ## }}}
 
 ### recipe ## {{{
@@ -32,7 +33,8 @@ class Recipe(DBBase):
     totaltime = db.Column(db.Float, nullable=False)
     preptime = db.Column(db.Float)
     cooktime = db.Column(db.Float)
-    difficulty = db.Column(db.Integer)    
+    difficulty = db.Column(db.Integer)
+    ingredientLists = db.relationship('IngredientList')
 
     def __init__(self, name, author, totaltime, preptime, cooktime, difficulty):
         self.name = name
@@ -48,7 +50,9 @@ class Recipe(DBBase):
                  "totaltime": self.totaltime,
                  "preptime": self.preptime,
                  "cooktime": self.cooktime,
-                 "difficulty": self.difficulty
+                 "difficulty": self.difficulty,
+                 "ingredientLists": list(map(IngredientList.serialize,
+                                             self.ingredientLists))
         }
 
 ## }}}

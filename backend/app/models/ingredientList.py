@@ -1,5 +1,5 @@
 ###############################################################################
-## __init__.py for sous chef backend                                          ##
+## ingredientList.py for sous-chef backend models package                    ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,13 +16,30 @@
 
 ### Commentary ## {{{
 ##
-## init file for the models package
+## IngredientList model for the sous-chef backend
 ##
 ## }}}
 
-### libraries ## {{{
-from .recipe import Recipe
-from .ingredientList import IngredientList
-from .author import Author
-from .dbbase import db
+### ingredientList ## {{{
+from .dbbase import DBBase, db
+
+class IngredientList(DBBase):
+    __tablename__ = "ingredientlist"
+    name      = db.Column(db.String(80))
+    displayorder     = db.Column(db.Integer, nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
+                          nullable=False)
+
+    def __init__(self, name, order, recipe_id):
+        self.name = name
+        self.displayorder = order
+        self.recipe_id = recipe_id
+
+    def serialize(self):
+        return { "name": self.name,
+                 "displayorder": self.displayorder,
+                 "recipe_id": self.recipe_id
+        }
+    
+
 ## }}}
