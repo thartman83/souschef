@@ -98,14 +98,29 @@ def gooddata():
               "totaltime": 1,
               "preptime": 1,
               "cooktime": 1,
-              "displayorder": 1,              
+              "displayorder": 1,
+              "steps": [
+                  {
+                      "text": "This is the first step",
+                      "displayorder": 1
+                  },
+                  {
+                      "text": "This is the second step",
+                      "displayorder": 2
+                  },
+                  {
+                      "text": "This is the third step",
+                      "displayorder": 3
+                  }
+              ]
           },
           {
               "name": "Step 2 Title",
               "totaltime": 2,
               "preptime": 2,
               "cooktime": 2,
-              "displayorder": 2,              
+              "displayorder": 2,
+              "steps": []
           }
       ]
     }

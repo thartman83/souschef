@@ -92,6 +92,8 @@ displayorder""" % recipe_id)
     assert row['displayorder'] == 1
     assert row['recipe_id'] == recipe_id
 
+    steplist_id = row['id']
+
     row = cursor.fetchone()
     assert row['name'] == 'Step 2 Title'
     assert row['totaltime'] == 2
@@ -99,5 +101,25 @@ displayorder""" % recipe_id)
     assert row['cooktime'] == 2
     assert row['displayorder'] == 2
     assert row['recipe_id'] == recipe_id
+    validateSteps(cursor, steplist_id)
+
+def validateSteps(cursor, steplist_id):
+    cursor.execute("""SELECT * FROM step where steplist_id = %i ORDER BY
+displayorder""" % steplist_id)
+
+    row = cursor.fetchone()
+    assert row['text'] == 'This is the first step'
+    assert row['displayorder'] == 1
+    assert row['steplist_id'] == steplist_id
+
+    row = cursor.fetchone()
+    assert row['text'] == 'This is the second step'
+    assert row['displayorder'] == 2
+    assert row['steplist_id'] == steplist_id
+
+    row = cursor.fetchone()
+    assert row['text'] == 'This is the third step'
+    assert row['displayorder'] == 3
+    assert row['steplist_id'] == steplist_id
     
 ## }}}

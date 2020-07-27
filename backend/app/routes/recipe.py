@@ -22,7 +22,8 @@
 
 ### recipe ## {{{
 from flask import Blueprint, request, jsonify
-from ..models import Recipe, Author, IngredientList, Ingredient, StepList, db
+from ..models import (Recipe, Author, IngredientList, Ingredient, StepList,
+                      Step, db)
 
 recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
@@ -57,7 +58,13 @@ def createRecipe():
     for s in request.json['stepLists']:
         stepList_id = createStepList(s, recipe.id)
         if stepList_id is None:
-            return "StepList was malformed", 422        
+            return "StepList was malformed", 422
+
+        for t in s['steps']:
+            step_id = createStep(t, stepList_id)
+
+            if step_id is None:
+                return "Step was malformed", 422
         
     db.session.commit()
     return jsonify({"recipe": recipe.serialize()})
@@ -91,13 +98,13 @@ def authorExists(firstname, lastname):
 def createIngredientList(ingredientList, recipe_id):
     if not 'name' in ingredientList or not 'displayorder' in ingredientList:
         return None
-    else:
-        ret = IngredientList(ingredientList['name'],
-                              ingredientList['displayorder'],
-                              recipe_id)
-        db.session.add(ret)
-        db.session.flush()
-        return ret.id
+
+    ret = IngredientList(ingredientList['name'],
+                         ingredientList['displayorder'],
+                         recipe_id)
+    db.session.add(ret)
+    db.session.flush()
+    return ret.id
 
 def createIngredient(ingredient, ingredientList_id):
     if not 'name' in ingredient or not 'unit' in ingredient or \
@@ -123,5 +130,15 @@ def createStepList(steplist, recipe_id):
     db.session.add(ret)
     db.session.flush()
     return ret.id
+
+def createStep(step, steplist_id):
+    if not 'text' in step or not 'displayorder' in step:
+        return None
+
+    ret = Step(step['text'], step['displayorder'], steplist_id)
+    db.session.add(ret)
+    db.session.flush()
+    return ret.id
+        
 
 ## }}}

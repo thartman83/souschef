@@ -1,5 +1,5 @@
 ###############################################################################
-## steplist.py for sous-chef backend models package                           ##
+## step.py for sous-chef backend models package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,41 +16,28 @@
 
 ### Commentary ## {{{
 ##
-## StepList model for the sous-chef backend models package 
+## Step model for the sous-chef model package 
 ##
 ## }}}
 
-### steplist ## {{{
+### step ## {{{
 from .dbbase import DBBase, db
-from .step import Step
 
-class StepList(DBBase):
-    __tablename__ = "steplist"
-    name = db.Column(db.String(80))
-    totaltime = db.Column(db.Integer)
-    preptime = db.Column(db.Integer)
-    cooktime = db.Column(db.Integer)
+class Step(DBBase):
+    __tablename__ = "step"
+    text = db.Column(db.Text, nullable=False)
     displayorder = db.Column(db.Integer, nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
-                          nullable = False)
-    steps = db.relationship('Step')
+    steplist_id = db.Column(db.Integer, db.ForeignKey('steplist.id'))
 
-    def __init__(self, name, totaltime, preptime, cooktime, displayorder,
-                 recipe_id):
-        self.name = name
-        self.totaltime = totaltime
-        self.preptime = preptime
-        self.cooktime = cooktime
+    def __init__(self, text, displayorder, steplist_id):
+        self.text = text
         self.displayorder = displayorder
-        self.recipe_id = recipe_id
+        self.steplist_id = steplist_id
 
     def serialize(self):
-        return { "name": self.name,
-                 "totaltime": self.totaltime,
-                 "preptime": self.preptime,
-                 "cooktime": self.cooktime,
+        return { "text": self.text,
                  "displayorder": self.displayorder,
-                 "recipe_id": self.recipe_id,
-                 "steps": list(map(Step.serialize, self.steps))
+                 "steplist_id": self.steplist_id
         }
+    
 ## }}}

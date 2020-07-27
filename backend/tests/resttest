@@ -39,9 +39,21 @@ Content-Type: application/json
         "stepLists": [        
                      {
                       "name": "Step List 1",
-                      "displayorder": 1
+                      "displayorder": 1,
+                      "steps": [
+                               {
+                                "text": "This is the first step",
+                                "displayorder": 1
+                               },
+                               {
+                               "text": "This is the second step",
+                               "displayorder": 2
+                               }
+                               
+                      ]
                      },
                      {
+                      "steps": [],
                       "displayorder": 2
                      }
         ]            

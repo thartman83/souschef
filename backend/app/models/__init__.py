@@ -25,6 +25,7 @@ from .recipe import Recipe
 from .ingredient import Ingredient
 from .ingredientList import IngredientList
 from .stepList import StepList
+from .step import Step
 from .author import Author
 from .dbbase import db
 ## }}}
