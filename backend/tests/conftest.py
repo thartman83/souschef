@@ -122,6 +122,14 @@ def gooddata():
               "displayorder": 2,
               "steps": []
           }
+      ],
+      "tags": [
+           {
+              "name": "tag1"
+           },
+           {
+             "name": "tag2"
+           }
       ]
     }
 

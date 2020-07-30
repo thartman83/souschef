@@ -44,6 +44,7 @@ def test_createRecipe(client, app, db, gooddata):
 
     validateIngredientLists(cursor, recipe_id)
     validateStepList(cursor, recipe_id)
+    validateTags(cursor, recipe_id)
 
 def validateIngredientLists(cursor, recipe_id):
     cursor.execute('SELECT * FROM ingredientlist ORDER BY displayorder')
@@ -121,5 +122,17 @@ displayorder""" % steplist_id)
     assert row['text'] == 'This is the third step'
     assert row['displayorder'] == 3
     assert row['steplist_id'] == steplist_id
-    
+
+def validateTags(cursor, recipe_id):
+    cursor.execute("""SELECT name, tag_id, recipe_id FROM tag 
+inner join tagxrecipe on tag.id = tagxrecipe.tag_id 
+WHERE recipe_id = %i""" % recipe_id)
+
+    row = cursor.fetchone()
+    assert row['name'] in ['tag1', 'tag2']
+    assert row['tag_id'] in [1, 2]
+
+    row = cursor.fetchone()
+    assert row['name'] in ['tag1', 'tag2']
+    assert row['tag_id'] in [1,2]
 ## }}}

@@ -23,7 +23,7 @@
 ### recipe ## {{{
 from flask import Blueprint, request, jsonify
 from ..models import (Recipe, Author, IngredientList, Ingredient, StepList,
-                      Step, db)
+                      Step, Tag, db)
 
 recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
@@ -65,7 +65,14 @@ def createRecipe():
 
             if step_id is None:
                 return "Step was malformed", 422
-        
+
+    if "tags" in request.json:
+        for t in request.json['tags']:
+            tag = getCreateTag(t, recipe)
+
+            if tag is None:
+                return "Tag data was malformed", 422        
+
     db.session.commit()
     return jsonify({"recipe": recipe.serialize()})
 
@@ -140,5 +147,16 @@ def createStep(step, steplist_id):
     db.session.flush()
     return ret.id
         
+
+def getCreateTag(tag, recipe):
+    if not 'name' in tag:
+        return None
+
+    t = Tag(tag['name'])
+    db.session.add(t)
+    
+    recipe.tags.append(t)
+    return t
+
 
 ## }}}

@@ -1,5 +1,5 @@
 ###############################################################################
-## __init__.py for sous chef backend                                          ##
+## tag.py for sous-chef backend models package                           ##
 ## Copyright (c) 2020 Tom Hartman (thomas.lees.hartman@gmail.com)            ##
 ##                                                                           ##
 ## This program is free software; you can redistribute it and/or             ##
@@ -16,17 +16,30 @@
 
 ### Commentary ## {{{
 ##
-## init file for the models package
+## Tag model for sous-chef models package 
 ##
 ## }}}
 
-### libraries ## {{{
-from .recipe import Recipe
-from .ingredient import Ingredient
-from .ingredientList import IngredientList
-from .stepList import StepList
-from .step import Step
-from .author import Author
-from .tag import Tag
-from .dbbase import db
+### tag ## {{{
+from .dbbase import DBBase, db
+
+class Tag(DBBase):
+    __tablename__ = "tag"
+    name = db.Column(db.String(20), nullable=False)
+    recipes = db.relationship('Tag', secondary='tagxrecipe')
+
+    def __init__(self, name):
+        self.name = name
+
+    def serialize(self):
+        return {
+            "name": self.name
+        }
+
+class TagXRecipe(db.Model):
+    __tablename__ = 'tagxrecipe'
+    __table_args__ = {'mysql_engine':'InnoDB'}
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
+                          primary_key=True)
 ## }}}

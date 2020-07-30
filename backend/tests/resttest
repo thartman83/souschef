@@ -56,5 +56,10 @@ Content-Type: application/json
                       "steps": [],
                       "displayorder": 2
                      }
-        ]            
+        ],
+        "tags": [
+                {
+                  "name": "tag1"
+                  }
+                  ]
     }

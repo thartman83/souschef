@@ -24,6 +24,7 @@
 from .dbbase import DBBase, db
 from .ingredientList import IngredientList
 from .stepList import StepList
+from .tag import Tag
 ## }}}
 
 ### recipe ## {{{
@@ -37,6 +38,7 @@ class Recipe(DBBase):
     difficulty = db.Column(db.Integer)
     ingredientLists = db.relationship('IngredientList')
     stepLists = db.relationship('StepList')
+    tags = db.relationship('Tag', secondary='tagxrecipe')
 
     def __init__(self, name, author, totaltime, preptime, cooktime, difficulty):
         self.name = name
