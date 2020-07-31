@@ -58,7 +58,8 @@ class Recipe(DBBase):
                  "ingredientLists": list(map(IngredientList.serialize,
                                              self.ingredientLists)),
                  "stepLists": list(map(StepList.serialize,
-                                       self.stepLists))
+                                       self.stepLists)),
+                "tags": list(map(Tag.serialize, self.tags))
         }
 
 ## }}}

@@ -27,6 +27,16 @@ from ..models import (Recipe, Author, IngredientList, Ingredient, StepList,
 
 recipe_bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
+@recipe_bp.route('', methods=['GET'])
+def getRecipes():
+    recipes = db.session.query(Recipe).all()
+    return jsonify(list(map(Recipe.serialize, recipes)))
+
+@recipe_bp.route('<name>', methods=['GET'])
+def getRecipe(name):
+    recipes = db.session.query(Recipe).filter(Recipe.name==name)
+    return jsonify(list(map(Recipe.serialize, recipes)))
+
 @recipe_bp.route('', methods=['POST'])
 def createRecipe():
     author = getCreateAuthor(request.json['author'])    
