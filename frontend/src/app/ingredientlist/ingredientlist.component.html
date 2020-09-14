@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col">
+    <h4>Ingredients
+      <a class="btn btn-success" href="#" data-toggle="tooltip" data-placement="bottom"
+         title="Have more than one set of ingredients? Add an additional ingredient list!">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </a>
+    </h4>
+  </div>
+</div>
+<div id="Ingredients">
+  <app-ingredient *ngFor="let ingredient of ingredients; let i = index;" id="ingredient{{i}}"
+                  (delete)="deleteIngredient($event)"></app-ingredient>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="form-group">
+      <div class="input-group">
+        <button type="button" class="btn btn-success" (click)="onAddIngredient();" href="#" >
+          <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

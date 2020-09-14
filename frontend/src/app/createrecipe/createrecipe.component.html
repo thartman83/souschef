@@ -1,0 +1,54 @@
+<div class="container">
+  <form id="createRecipeFrm" action="submitRecipe">
+    <div class="py-5 text-center">
+      <h2>Add Your New Recipe</h2>
+      <figure class="figure">
+        <img src="../../assets/placeholder.svg" class="figure-img img-fluid rounded"
+             alt="A generic square placeholder image with rounded corners in a figure.">
+        <figcaption class="figure-caption">Click here to add a picture of your recipe</figcaption>
+      </figure>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h4>Recipe Information</h4>
+      </div>
+    </div>
+    <div class="row">      
+      <div class="col">
+        <div class="form-group">
+          <label for="name">Recipe name</label>
+            <input class="form-control" name="" type="text" step="5" value=""/>
+        </div>
+      </div>      
+      <div class="col-2">
+        <div class="form-group">
+          <label for="">Prep Time (Minutes)</label>
+          <input class="form-control" name="" type="number" step="5" value=""/>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="form-group">
+          <label for="">Cook Time (Minutes)</label>
+          <input class="form-control" name="" type="number" step="5" value=""/>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="form-group">
+          <label for="">Total Time (Minutes)</label>
+          <input class="form-control" readonly name="" type="number" step="5" value=""/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="">Description</label>
+          <div class="input-group">
+            <textarea class="form-control" cols="30" id="" name="" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-ingredientlist></app-ingredientlist>
+  </form>  
+</div>
