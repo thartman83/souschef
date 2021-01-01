@@ -9,8 +9,6 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 export class IngredientComponent implements OnInit {
   @Output() delete: EventEmitter<IngredientComponent> = new EventEmitter();
 
-  index: number;
-
   constructor() {
   }
 
@@ -18,7 +16,7 @@ export class IngredientComponent implements OnInit {
   }
 
   onDelete(): void {
-    this.delete.emit(this);
+    this.delete.emit();
   }
 
   faPlus = faPlus;
